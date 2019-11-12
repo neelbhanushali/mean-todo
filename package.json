@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/neelbhanushali/mean-todo/issues"
   },
-  "homepage": "https://github.com/neelbhanushali/mean-todo#readme"
+  "homepage": "https://github.com/neelbhanushali/mean-todo#readme",
+  "dependencies": {
+    "mongoose": "^5.7.10"
+  }
 }
