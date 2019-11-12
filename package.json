@@ -1,0 +1,24 @@
+{
+  "name": "mean-todo",
+  "version": "1.0.0",
+  "description": "Todo app in MEAN Stack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neelbhanushali/mean-todo.git"
+  },
+  "keywords": [
+    "mean",
+    "todo",
+    "mean-todo"
+  ],
+  "author": "Neel Bhanushali <neal.bhanushali@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neelbhanushali/mean-todo/issues"
+  },
+  "homepage": "https://github.com/neelbhanushali/mean-todo#readme"
+}
