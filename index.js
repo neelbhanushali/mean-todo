@@ -17,6 +17,6 @@ const routes = require("./routes");
 app.use("/", routes);
 
 // server
-const server = app.listen(3000, function() {
-  console.log("server started on port 3000");
+const server = app.listen(6969, function() {
+  console.log("server started on port 6969");
 });
