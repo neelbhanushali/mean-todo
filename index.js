@@ -20,6 +20,7 @@ global.reqlib = require("app-root-path").require;
 const express = require("express");
 const app = express();
 const routes = reqlib("/routes");
+app.use(express.json());
 app.use("/", routes);
 
 // server
