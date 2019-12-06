@@ -13,10 +13,13 @@ db.once("open", function() {
   console.log("connected to mongodb");
 });
 
+// require from root
+global.reqlib = require("app-root-path").require;
+
 // express
 const express = require("express");
 const app = express();
-const routes = require("./routes");
+const routes = reqlib("/routes");
 app.use("/", routes);
 
 // server
