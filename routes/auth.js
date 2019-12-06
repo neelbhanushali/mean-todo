@@ -1,10 +1,10 @@
 const router = require("express").Router();
 
-router.get("/login", (req, res) => {
+router.post("/login", (req, res) => {
   res.json({ url: req.originalUrl });
 });
 
-router.get("/register", (req, res) => {
+router.post("/register", (req, res) => {
   res.json({ url: req.originalUrl });
 });
 
