@@ -1,11 +1,7 @@
 const router = require("express").Router();
+const authController = reqlib("app/controllers/authController");
 
-router.post("/login", (req, res) => {
-  res.json({ url: req.originalUrl });
-});
-
-router.post("/register", (req, res) => {
-  res.json({ url: req.originalUrl });
-});
+router.post("/login", authController.login);
+router.post("/register", authController.register);
 
 module.exports = router;

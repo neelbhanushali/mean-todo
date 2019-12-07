@@ -1,11 +1,7 @@
 const router = require("express").Router();
+const userController = reqlib("app/controllers/userController");
 
-router.get("/", (req, res) => {
-  res.json({ url: req.originalUrl });
-});
-
-router.get("/:userId", (req, res) => {
-  res.json({ url: req.originalUrl, params: req.params });
-});
+router.get("/", userController.list);
+router.get("/:userId", userController.show);
 
 module.exports = router;
