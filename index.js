@@ -20,7 +20,7 @@ global.reqlib = require("app-root-path").require;
 const express = require("express");
 const app = express();
 app.use(express.json());
-app.use("/", reqlib("/routes"));
+app.use("/", reqlib("routes"));
 
 // server
 const server = app.listen(process.env.SERVER_PORT, function() {
