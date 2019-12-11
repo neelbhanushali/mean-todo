@@ -1,4 +1,5 @@
 const userModel = reqlib("app/models/userModel").userModel;
+
 module.exports = {
   login(req, res) {
     res.send("login");
