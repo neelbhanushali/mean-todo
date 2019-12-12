@@ -1,4 +1,5 @@
 const UserModel = reqlib("app/models/UserModel").UserModel;
+const UserTokenModel = reqlib("app/models/UserTokenModel").UserTokenModel;
 const { check } = require("express-validator");
 
 module.exports = {
@@ -24,7 +25,7 @@ module.exports = {
       .isEmail()
       .withMessage("email sahi daal re")
       .custom(async function(value) {
-        const user = await userModel.findOne({ email: value });
+        const user = await UserModel.findOne({ email: value });
         if (user) {
           return Promise.reject("email already in use");
         }
@@ -79,11 +80,22 @@ module.exports = {
       }
     });
 
+    const token = new UserTokenModel({
+      user: user._id,
+      token: Math.random()
+        .toString(36)
+        .substring(7),
+      type: "activation_token",
+      expires_at: new Date()
+    });
+
+    await token.save();
+
     var mailOptions = {
       from: `${process.env.APP_NAME} <${process.env.MAIL_FROM_EMAIL}>`,
       to: `${user.first_name} <${user.email}>`,
       subject: "Registration done",
-      html: `Sup <b>${user.first_name}</b>`
+      html: `Sup <b>${user.first_name}</b><br>${token.token}`
     };
 
     transport.sendMail(mailOptions, function(error, info) {
