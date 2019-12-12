@@ -1,5 +1,5 @@
 const userModel = reqlib("app/models/userModel").userModel;
-const { check, sanitize, validationResult } = require("express-validator");
+const { check } = require("express-validator");
 
 module.exports = {
   login(req, res) {
@@ -68,5 +68,30 @@ module.exports = {
     await user.save();
 
     res.send(user);
+
+    const nodemailer = require("nodemailer");
+    const transport = nodemailer.createTransport({
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
+      auth: {
+        user: process.env.MAIL_USERNAME,
+        pass: process.env.MAIL_PASSWORD
+      }
+    });
+
+    var mailOptions = {
+      from: `${process.env.APP_NAME} <${process.env.MAIL_FROM_EMAIL}>`,
+      to: `${user.first_name} <${user.email}>`,
+      subject: "Registration done",
+      html: `Sup <b>${user.first_name}</b>`
+    };
+
+    transport.sendMail(mailOptions, function(error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
   }
 };
