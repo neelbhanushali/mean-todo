@@ -1,4 +1,4 @@
-const userModel = reqlib("app/models/userModel").userModel;
+const UserModel = reqlib("app/models/UserModel").UserModel;
 const { check } = require("express-validator");
 
 module.exports = {
@@ -56,7 +56,7 @@ module.exports = {
       .withMessage("dob sahi se daal re")
   ],
   async register(req, res) {
-    const user = new userModel({
+    const user = new UserModel({
       first_name: req.body.first_name,
       middle_name: req.body.middle_name ? req.body.middle_name : null,
       last_name: req.body.last_name,
