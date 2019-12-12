@@ -12,10 +12,14 @@ const userSchema = new Schema(
     last_name: String,
     dob: Date,
     email: String,
-    password: String
+    password: String,
+    verified_at: {
+      type: Date,
+      default: null
+    }
   },
   {
-    timestamps: true
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" }
   }
 );
 
