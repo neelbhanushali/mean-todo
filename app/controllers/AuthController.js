@@ -55,6 +55,12 @@ module.exports = {
       .isISO8601()
       .withMessage("dob sahi se daal re")
   ],
+  requestActivationValidator: [
+    check("user")
+      .not()
+      .isEmpty()
+      .withMessage("user id daal na re")
+  ],
   async register(req, res) {
     const user = new UserModel({
       first_name: req.body.first_name,
@@ -69,7 +75,17 @@ module.exports = {
 
     res.send(user);
 
-    user.requestActivation();
+    await user.requestActivation();
   },
-  async requestActivation(req, res) {}
+  async activationRequest(req, res) {
+    const user = await UserModel.findOne({ _id: req.body.user });
+
+    if (!user) {
+      return res.send("user not found");
+    }
+
+    res.send("email sent");
+
+    await user.requestActivation();
+  }
 };

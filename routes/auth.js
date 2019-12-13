@@ -7,6 +7,10 @@ router.post(
   validate(AuthController.registerValidator),
   AuthController.register
 );
-router.post("request-activation", AuthController.requestActivation);
+router.post(
+  "/request-activation",
+  validate(AuthController.requestActivationValidator),
+  AuthController.activationRequest
+);
 
 module.exports = router;

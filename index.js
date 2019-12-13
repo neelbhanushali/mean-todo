@@ -5,7 +5,8 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_DB_CONNECTION_URL, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -25,4 +26,6 @@ app.use("/", reqlib("routes"));
 // server
 const server = app.listen(process.env.SERVER_PORT, function() {
   console.log(`server started on port ${process.env.SERVER_PORT}`);
+  const listEndpoints = require("express-list-endpoints");
+  console.log(listEndpoints(app));
 });
