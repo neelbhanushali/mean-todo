@@ -1,6 +1,7 @@
 const UserModel = reqlib("app/models/UserModel").UserModel;
 const UserTokenModel = reqlib("app/models/UserTokenModel").UserTokenModel;
 const { check } = require("express-validator");
+const moment = require("moment");
 
 module.exports = {
   login(req, res) {
@@ -82,20 +83,22 @@ module.exports = {
 
     const token = new UserTokenModel({
       user: user._id,
-      token: Math.random()
-        .toString(36)
-        .substring(7),
+      token: Math.random().toString(36),
       type: "activation_token",
-      expires_at: new Date()
+      expires_at: moment()
+        .add(10, "m")
+        .toISOString()
     });
 
     await token.save();
+
+    const url = `http://localhost:6969/users/${user._id}/token/${token.token}`;
 
     var mailOptions = {
       from: `${process.env.APP_NAME} <${process.env.MAIL_FROM_EMAIL}>`,
       to: `${user.first_name} <${user.email}>`,
       subject: "Registration done",
-      html: `Sup <b>${user.first_name}</b><br>${token.token}`
+      html: `Sup <b>${user.first_name}</b><br><a href="${url}">activate</a><br>link will be valid for 10 mins`
     };
 
     transport.sendMail(mailOptions, function(error, info) {
