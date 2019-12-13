@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
+const moment = require("moment");
+const UserTokenModel = reqlib("app/models/UserTokenModel").UserTokenModel;
+const nodemailer = require("nodemailer");
 
 const UserSchema = new Schema(
   {
@@ -30,6 +33,45 @@ UserSchema.pre("save", function(next) {
   this.password = bcrypt.hashSync(this.password, 10);
   next();
 });
+
+UserSchema.methods.requestActivation = async function() {
+  const transport = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    auth: {
+      user: process.env.MAIL_USERNAME,
+      pass: process.env.MAIL_PASSWORD
+    }
+  });
+
+  const token = new UserTokenModel({
+    user: this._id,
+    token: Math.random().toString(36),
+    type: "activation_token",
+    expires_at: moment()
+      .add(10, "m")
+      .toISOString()
+  });
+
+  await token.save();
+
+  const url = `http://localhost:6969/users/${this._id}/token/${token.token}`;
+
+  var mailOptions = {
+    from: `${process.env.APP_NAME} <${process.env.MAIL_FROM_EMAIL}>`,
+    to: `${this.first_name} <${this.email}>`,
+    subject: "Registration done",
+    html: `Sup <b>${this.first_name}</b><br><a href="${url}">activate</a><br>link will be valid for 10 mins`
+  };
+
+  transport.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+};
 
 const UserModel = mongoose.model("User", UserSchema);
 
