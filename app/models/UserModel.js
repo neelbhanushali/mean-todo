@@ -4,6 +4,8 @@ const bcrypt = require("bcryptjs");
 const moment = require("moment");
 const UserTokenModel = reqlib("app/models/UserTokenModel").UserTokenModel;
 const nodemailer = require("nodemailer");
+const ejs = require("ejs");
+const fs = require("fs");
 
 const UserSchema = new Schema(
   {
@@ -55,13 +57,19 @@ UserSchema.methods.requestActivation = async function() {
 
   await token.save();
 
-  const url = `http://localhost:6969/users/${this._id}/token/${token.token}`;
+  let data = this;
+  data.url = `http://localhost:6969/users/${this._id}/token/${token.token}`;
+
+  const template = fs.readFileSync(
+    appRoot + "/resources/templates/activationEmail.html",
+    { encoding: "utf-8" }
+  );
 
   var mailOptions = {
     from: `${process.env.APP_NAME} <${process.env.MAIL_FROM_EMAIL}>`,
     to: `${this.first_name} <${this.email}>`,
-    subject: "Registration done",
-    html: `Sup <b>${this.first_name}</b><br><a href="${url}">activate</a><br>link will be valid for 10 mins`
+    subject: "Activate your account",
+    html: ejs.render(template, this)
   };
 
   transport.sendMail(mailOptions, function(error, info) {
