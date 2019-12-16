@@ -15,7 +15,8 @@ db.once("open", function() {
 });
 
 // require from root
-global.reqlib = require("app-root-path").require;
+global.appRoot = require("app-root-path");
+global.reqlib = appRoot.require;
 
 // express
 const express = require("express");
