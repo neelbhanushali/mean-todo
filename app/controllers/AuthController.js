@@ -83,10 +83,18 @@ module.exports = {
       .withMessage("dob sahi se daal re")
   ],
   requestActivationValidator: [
-    check("user")
+    check("email")
       .not()
       .isEmpty()
-      .withMessage("user id daal na re")
+      .withMessage("email daal na re")
+      .isEmail()
+      .withMessage("email sahi se daal re")
+      .custom(async function(value) {
+        const user = await UserModel.findOne({ email: value });
+        if (!user) {
+          return Promise.reject("email nahi mila re");
+        }
+      })
   ],
   async register(req, res) {
     const user = new UserModel({
@@ -105,11 +113,7 @@ module.exports = {
     await user.requestActivation();
   },
   async activationRequest(req, res) {
-    const user = await UserModel.findOne({ _id: req.body.user });
-
-    if (!user) {
-      return res.send("user not found");
-    }
+    const user = await UserModel.findOne({ email: req.body.email });
 
     res.send("email sent");
 
