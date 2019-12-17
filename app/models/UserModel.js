@@ -37,6 +37,9 @@ UserSchema.pre("save", function(next) {
 });
 
 UserSchema.methods.requestActivation = async function() {
+  this.verified_at = null;
+  await this.save();
+
   const transport = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: process.env.MAIL_PORT,
