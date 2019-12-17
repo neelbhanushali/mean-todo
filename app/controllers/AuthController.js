@@ -1,9 +1,36 @@
 const UserModel = reqlib("app/models/UserModel").UserModel;
 const { check } = require("express-validator");
+const bcrypt = require("bcryptjs");
 
 module.exports = {
-  login(req, res) {
-    res.send("login");
+  loginValidator: [
+    check("email")
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage("email daal re")
+      .isEmail()
+      .withMessage("email sahi daal re")
+      .custom(async function(value) {
+        const user = await UserModel.findOne({ email: value });
+        if (!user) {
+          return Promise.reject("pehle register toh karle");
+        }
+      }),
+    check("password")
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage("password daal re")
+  ],
+  async login(req, res) {
+    const user = await UserModel.findOne({ email: req.body.email });
+
+    if (!bcrypt.compareSync(req.body.password, user.password)) {
+      return res.send("invalid credentials");
+    }
+
+    res.json(user);
   },
   registerValidator: [
     check("first_name")
