@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const Responder = reqlib("app/services/ResponderService");
 
 // global validate function
 // sauce: https://express-validator.github.io/docs/running-imperatively.html#example-standardized-validation-error-response
@@ -12,7 +13,7 @@ global.validate = validations => {
       return next();
     }
 
-    res.status(422).json({ errors: errors.mapped() });
+    return Responder.validationError(res, errors.mapped());
   };
 };
 
