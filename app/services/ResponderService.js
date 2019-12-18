@@ -8,6 +8,11 @@ module.exports = {
         response.status = true;
         break;
 
+      case 404:
+        response.message = data;
+        response.status = false;
+        break;
+
       case 422:
         response.errors = data;
         response.message = "validation error";
@@ -23,5 +28,9 @@ module.exports = {
 
   validationError(res, errors) {
     this.respond(res, errors, 422);
+  },
+
+  notFound(res, message) {
+    this.respond(res, message, 404);
   }
 };

@@ -1,6 +1,7 @@
 const UserModel = reqlib("app/models/UserModel").UserModel;
 const { check } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const Responder = reqlib("app/services/ResponderService");
 
 module.exports = {
   loginValidator: [
@@ -30,7 +31,7 @@ module.exports = {
       return res.send("invalid credentials");
     }
 
-    res.json(user);
+    Responder.success(res, user);
   },
   registerValidator: [
     check("first_name")
@@ -108,14 +109,14 @@ module.exports = {
 
     await user.save();
 
-    res.send(user);
+    Responder.success(res, user);
 
     await user.requestActivation();
   },
   async activationRequest(req, res) {
     const user = await UserModel.findOne({ email: req.body.email });
 
-    res.send("email sent");
+    Responder.success(res, "email sent");
 
     await user.requestActivation();
   }

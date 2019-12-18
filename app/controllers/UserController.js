@@ -3,6 +3,8 @@ const UserTokenModel = reqlib("app/models/UserTokenModel").UserTokenModel;
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 const moment = require("moment");
+const Responder = reqlib("app/services/ResponderService");
+const fs = require("fs");
 
 module.exports = {
   list(req, res) {
@@ -24,10 +26,10 @@ module.exports = {
     ]);
 
     if (!user.length) {
-      return res.status(404).send("not found");
+      return Responder.notFound(res, "user not found");
     }
 
-    res.json(user[0]);
+    Responder.success(res, user[0]);
   },
   async activate(req, res) {
     const token = await UserTokenModel.findOne({
@@ -39,7 +41,11 @@ module.exports = {
     });
 
     if (!token) {
-      return res.send("token either invalid or expired");
+      const template = fs.readFileSync(
+        appRoot + "/resources/views/activationTokenNotValid.html",
+        { encoding: "utf-8" }
+      );
+      return res.send(template);
     }
 
     let user = await UserModel.findOneAndUpdate(
@@ -51,7 +57,11 @@ module.exports = {
       }
     );
 
-    res.send("user activated");
+    const template = fs.readFileSync(
+      appRoot + "/resources/views/userActivated.html",
+      { encoding: "utf-8" }
+    );
+    res.send(template);
 
     token.is_revoked = true;
     await token.save();
