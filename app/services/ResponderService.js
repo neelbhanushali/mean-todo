@@ -8,6 +8,11 @@ module.exports = {
         response.status = true;
         break;
 
+      case 401:
+        response.message = data;
+        response.status = false;
+        break;
+
       case 404:
         response.message = data;
         response.status = false;
@@ -32,5 +37,9 @@ module.exports = {
 
   notFound(res, message) {
     this.respond(res, message, 404);
+  },
+
+  unauthorized(res, message = "unauthorized") {
+    this.respond(res, message, 401);
   }
 };

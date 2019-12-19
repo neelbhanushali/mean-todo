@@ -28,7 +28,7 @@ module.exports = {
     const user = await UserModel.findOne({ email: req.body.email });
 
     if (!bcrypt.compareSync(req.body.password, user.password)) {
-      return res.send("invalid credentials");
+      return Responder.unauthorized(res, "invalid credentials");
     }
 
     Responder.success(res, user);
