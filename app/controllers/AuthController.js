@@ -2,6 +2,7 @@ const UserModel = reqlib("app/models/UserModel").UserModel;
 const { check } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const Responder = reqlib("app/services/ResponderService");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
   loginValidator: [
@@ -31,7 +32,11 @@ module.exports = {
       return Responder.unauthorized(res, "invalid credentials");
     }
 
-    Responder.success(res, user);
+    const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRY,
+      notBefore: process.env.JWT_NOT_BEFORE
+    });
+    Responder.success(res, token);
   },
   registerValidator: [
     check("first_name")

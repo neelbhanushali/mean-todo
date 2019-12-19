@@ -17,6 +17,23 @@ global.validate = validations => {
   };
 };
 
+global.bearerToken = req => {
+  let authorization = req.headers.authorization;
+  if (!authorization) {
+    return null;
+  }
+
+  authorization = authorization.split(" ");
+  if (authorization.length == 1) {
+    return null;
+  }
+  if (authorization[0] != "Bearer") {
+    return null;
+  }
+
+  return authorization[1];
+};
+
 router.use("/auth", require("./auth"));
 router.use("/users", require("./users"));
 
