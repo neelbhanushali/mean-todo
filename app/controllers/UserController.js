@@ -42,7 +42,7 @@ module.exports = {
 
     if (!token) {
       const template = fs.readFileSync(
-        appRoot + "/resources/views/ActivationTokenNotValid.html",
+        appRoot + "/resources/views/activation-token-not-valid.html",
         { encoding: "utf-8" }
       );
       return res.send(template);
@@ -58,7 +58,7 @@ module.exports = {
     );
 
     const template = fs.readFileSync(
-      appRoot + "/resources/views/UserActivated.html",
+      appRoot + "/resources/views/user-activated.html",
       { encoding: "utf-8" }
     );
     res.send(template);
