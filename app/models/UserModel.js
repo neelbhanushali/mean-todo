@@ -64,7 +64,7 @@ UserSchema.methods.requestActivation = async function() {
   data.url = `http://localhost:6969/users/${this._id}/token/${token.token}`;
 
   const template = fs.readFileSync(
-    appRoot + "/resources/templates/activationEmail.html",
+    appRoot + "/resources/templates/ActivationEmail.html",
     { encoding: "utf-8" }
   );
 
