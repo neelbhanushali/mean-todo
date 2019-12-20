@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const TodoController = reqlib("app/controllers/TodoController");
+const TodoController = reqlib("app/controllers/v1/TodoController");
 
 router.get("/", TodoController.list);
 
