@@ -22,6 +22,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 app.use("/", reqlib("routes"));
+app.use(express.static("public"));
 
 // server
 const server = app.listen(process.env.SERVER_PORT, function() {
