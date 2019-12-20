@@ -38,6 +38,7 @@ module.exports = {
     });
     Responder.success(res, token);
   },
+
   registerValidator: [
     check("first_name")
       .trim()
@@ -88,20 +89,19 @@ module.exports = {
       .isISO8601()
       .withMessage("dob sahi se daal re")
   ],
-  requestActivationValidator: [
-    check("email")
-      .not()
-      .isEmpty()
-      .withMessage("email daal na re")
-      .isEmail()
-      .withMessage("email sahi se daal re")
-      .custom(async function(value) {
-        const user = await UserModel.findOne({ email: value });
-        if (!user) {
-          return Promise.reject("email nahi mila re");
-        }
-      })
-  ],
+  /**
+   * @api {POST} /api/v1/auth/register Register
+   * @apiName Register
+   * @apiGroup Auth
+   * @apiVersion 1.0.0
+   * @apiParam {String} first_name
+   * @apiParam {String} last_name
+   * @apiParam {Email} email
+   * @apiParam {Date} dob
+   * @apiParam {String} password
+   * @apiParam {String} password
+   * @apiParam {String} password_confirmation
+   */
   async register(req, res) {
     const user = new UserModel({
       first_name: req.body.first_name,
@@ -118,6 +118,21 @@ module.exports = {
 
     await user.requestActivation();
   },
+
+  requestActivationValidator: [
+    check("email")
+      .not()
+      .isEmpty()
+      .withMessage("email daal na re")
+      .isEmail()
+      .withMessage("email sahi se daal re")
+      .custom(async function(value) {
+        const user = await UserModel.findOne({ email: value });
+        if (!user) {
+          return Promise.reject("email nahi mila re");
+        }
+      })
+  ],
   async activationRequest(req, res) {
     const user = await UserModel.findOne({ email: req.body.email });
 
