@@ -38,7 +38,35 @@ module.exports = {
     });
     Responder.success(res, token);
   },
+  /**
+   * @api {POST} /api/v1/auth/register Register
+   * @apiName Register
+   * @apiGroup Auth
+   * @apiVersion 1.0.0
+   * @apiParam {String} first_name
+   * @apiParam {String} last_name
+   * @apiParam {Email} email
+   * @apiParam {Date} dob
+   * @apiParam {String} password
+   * @apiParam {String} password
+   * @apiParam {String} password_confirmation
+   */
+  async register(req, res) {
+    const user = new UserModel({
+      first_name: req.body.first_name,
+      middle_name: req.body.middle_name ? req.body.middle_name : null,
+      last_name: req.body.last_name,
+      dob: req.body.dob,
+      email: req.body.email,
+      password: req.body.password
+    });
 
+    await user.save();
+
+    Responder.success(res, user);
+
+    await user.requestActivation();
+  },
   registerValidator: [
     check("first_name")
       .trim()
@@ -89,35 +117,6 @@ module.exports = {
       .isISO8601()
       .withMessage("dob sahi se daal re")
   ],
-  /**
-   * @api {POST} /api/v1/auth/register Register
-   * @apiName Register
-   * @apiGroup Auth
-   * @apiVersion 1.0.0
-   * @apiParam {String} first_name
-   * @apiParam {String} last_name
-   * @apiParam {Email} email
-   * @apiParam {Date} dob
-   * @apiParam {String} password
-   * @apiParam {String} password
-   * @apiParam {String} password_confirmation
-   */
-  async register(req, res) {
-    const user = new UserModel({
-      first_name: req.body.first_name,
-      middle_name: req.body.middle_name ? req.body.middle_name : null,
-      last_name: req.body.last_name,
-      dob: req.body.dob,
-      email: req.body.email,
-      password: req.body.password
-    });
-
-    await user.save();
-
-    Responder.success(res, user);
-
-    await user.requestActivation();
-  },
 
   requestActivationValidator: [
     check("email")
