@@ -44,12 +44,16 @@ module.exports = {
    * @apiGroup Auth
    * @apiVersion 1.0.0
    * @apiParam {String} first_name
+   * @apiParam {String} middle_name
    * @apiParam {String} last_name
    * @apiParam {Email} email
    * @apiParam {Date} dob
    * @apiParam {String} password
    * @apiParam {String} password
    * @apiParam {String} password_confirmation
+   * @apiUse ValidationErrorResponse
+   * @apiUse SuccessResponse
+   * @apiSuccess {String} data=null
    */
   async register(req, res) {
     const user = new UserModel({
@@ -63,7 +67,7 @@ module.exports = {
 
     await user.save();
 
-    Responder.success(res, user);
+    Responder.success(res, null);
 
     await user.requestActivation();
   },
