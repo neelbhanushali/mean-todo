@@ -4,13 +4,13 @@
   "description": "Todo app in MEAN Stack",
   "apidoc": {
     "title": "Mean Todo",
-    "url": "http://127.0.0.1:6969",
-    "sampleUrl": "http://127.0.0.1:6969"
+    "url": "http://localhost:6969",
+    "sampleUrl": "http://localhost:6969"
   },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon",
+    "start": "nodemon --ignore public/*",
     "apidocs": "apidoc -i app/controllers -o public/apidocs"
   },
   "repository": {
@@ -31,6 +31,7 @@
   "dependencies": {
     "app-root-path": "^3.0.0",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "express": "^4.17.1",

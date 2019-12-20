@@ -20,8 +20,16 @@ require("./global");
 // express
 const express = require("express");
 const app = express();
-app.use(express.json());
+
+// body parser
+const bodyparser = require("body-parser");
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded());
+
+// routing
 app.use("/", reqlib("routes"));
+
+// static
 app.use(express.static("public"));
 
 // server
