@@ -15,7 +15,7 @@ db.once("open", function() {
 });
 
 // global
-require("./Global");
+require("./global");
 
 // express
 const express = require("express");
