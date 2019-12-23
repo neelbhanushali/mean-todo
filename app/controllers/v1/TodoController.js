@@ -2,8 +2,22 @@ const { check } = require("express-validator");
 const TodoModel = reqlib("app/models/TodoModel").TodoModel;
 const Responder = reqlib("app/services/ResponderService");
 module.exports = {
-  list(req, res) {
-    res.send(req.url);
+  /**
+   * @api {GET} /api/v1/todo Get todo list
+   * @apiName Get todo list
+   * @apiGroup Todo
+   * @apiVersion 1.0.0
+   * @apiUse AuthHeader
+   * @apiUse ValidationErrorResponse
+   * @apiUse SuccessResponse
+   */
+  async list(req, res) {
+    const todos = await TodoModel.find(
+      { user: res.locals.decoded.sub },
+      { is_complete: 1, body: 1 }
+    ).sort("-created_at");
+
+    Responder.success(res, todos);
   },
   /**
    * @api {POST} /api/v1/todo Create todo
