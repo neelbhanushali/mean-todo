@@ -15,6 +15,7 @@ module.exports = {
    * @apiParam {String} password
    * @apiUse UnauthorizedResponse
    * @apiUse ValidationErrorResponse
+   * @apiUse UnauthorizedResponse
    * @apiUse SuccessResponse
    * @apiSuccess {Object} data
    * @apiSuccess {Object} data.token
