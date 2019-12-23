@@ -10,7 +10,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --ignore public/*",
+    "start": "nodemon app.js --ignore public/*",
     "apidocs": "apidoc -i app/controllers -o public/apidocs"
   },
   "repository": {
