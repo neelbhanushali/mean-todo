@@ -7,5 +7,6 @@ router.post(
   validate(TodoController.createValidator),
   TodoController.create
 );
+router.post("/:todoId", TodoController.completeTodo);
 
 module.exports = router;

@@ -35,7 +35,7 @@ module.exports = {
     this.respond(res, errors, 422);
   },
 
-  notFound(res, message) {
+  notFound(res, message = "not found") {
     this.respond(res, message, 404);
   },
 

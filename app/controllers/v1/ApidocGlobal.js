@@ -5,6 +5,12 @@
  */
 
 /**
+ * @apiDefine NotFoundResponse
+ * @apiError (Error 404) {Boolean} status=false
+ * @apiError (Error 404) {message} message
+ */
+
+/**
  * @apiDefine ValidationErrorResponse
  * @apiError (Error 422) {Boolean} status=false
  * @apiError (Error 422) {message} message="validation error"

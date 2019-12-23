@@ -1,6 +1,7 @@
 const { check } = require("express-validator");
 const TodoModel = reqlib("app/models/TodoModel").TodoModel;
 const Responder = reqlib("app/services/ResponderService");
+const ObjectId = require("mongoose").Types.ObjectId;
 module.exports = {
   /**
    * @api {GET} /api/v1/todo Get todo list
@@ -46,5 +47,38 @@ module.exports = {
       .not()
       .isEmpty()
       .withMessage("todo daal re")
-  ]
+  ],
+  /**
+   * @api {POST} /api/v1/todo/:todoId Mark todo complete
+   * @apiName Mark todo complete
+   * @apiGroup Todo
+   * @apiVersion 1.0.0
+   * @apiUse AuthHeader
+   * @apiUse NotFoundResponse
+   * @apiUse SuccessResponse
+   * @apiUse ValidationErrorResponse
+   * @apiSuccess {String} data=null
+   */
+  async completeTodo(req, res) {
+    if (!ObjectId.isValid(req.params.todoId)) {
+      return Responder.validationError(res, {
+        todoId: "todo id not valid"
+      });
+    }
+
+    const todo = await TodoModel.findOne({
+      user: res.locals.decoded.sub,
+      _id: req.params.todoId,
+      is_complete: false
+    });
+
+    if (!todo) {
+      return Responder.notFound(res, "todo not found");
+    }
+
+    todo.is_complete = true;
+    await todo.save();
+
+    Responder.success(res, null);
+  }
 };
