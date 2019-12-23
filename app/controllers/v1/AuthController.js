@@ -121,7 +121,23 @@ module.exports = {
       .isISO8601()
       .withMessage("dob sahi se daal re")
   ],
+  /**
+   * @api {POST} /api/v1/auth/request-activation Request Activation
+   * @apiName Request Activation
+   * @apiGroup Auth
+   * @apiVersion 1.0.0
+   * @apiParam {Email} email
+   * @apiUse ValidationErrorResponse
+   * @apiUse SuccessResponse
+   * @apiSuccess {String} data="email sent"
+   */
+  async activationRequest(req, res) {
+    const user = await UserModel.findOne({ email: req.body.email });
 
+    Responder.success(res, "email sent");
+
+    await user.requestActivation();
+  },
   requestActivationValidator: [
     check("email")
       .not()
@@ -135,12 +151,5 @@ module.exports = {
           return Promise.reject("email nahi mila re");
         }
       })
-  ],
-  async activationRequest(req, res) {
-    const user = await UserModel.findOne({ email: req.body.email });
-
-    Responder.success(res, "email sent");
-
-    await user.requestActivation();
-  }
+  ]
 };
