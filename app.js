@@ -28,6 +28,8 @@ app.use(bodyparser.urlencoded({ extended: true }));
 
 // routing
 app.use("/", reqlib("routes"));
+const UserController = reqlib("app/controllers/v1/UserController");
+app.get("/activate-user/:userId/token/:token", UserController.activate);
 
 // static
 app.use(express.static("public"));
