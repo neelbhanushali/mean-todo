@@ -3,8 +3,44 @@ const { check } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const Responder = reqlib("app/services/ResponderService");
 const jwt = require("jsonwebtoken");
+const moment = require("moment");
 
 module.exports = {
+  /**
+   * @api {POST} /api/v1/auth/login Login
+   * @apiName Login
+   * @apiGroup Auth
+   * @apiVersion 1.0.0
+   * @apiParam {Email} email
+   * @apiParam {String} password
+   * @apiUse UnauthorizedResponse
+   * @apiUse ValidationErrorResponse
+   * @apiUse SuccessResponse
+   * @apiSuccess {Object} data
+   * @apiSuccess {Object} data.token
+   * @apiSuccess {Object} data.expires_at
+   */
+  async login(req, res) {
+    const user = await UserModel.findOne({ email: req.body.email });
+
+    if (!bcrypt.compareSync(req.body.password, user.password)) {
+      return Responder.unauthorized(res, "invalid credentials");
+    }
+
+    const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRY,
+      notBefore: process.env.JWT_NOT_BEFORE
+    });
+
+    const expires_at = moment()
+      .add(
+        process.env.JWT_EXPIRY_MOMENT_MAGNITUDE,
+        process.env.JWT_EXPIRY_MOMENT_UNIT
+      )
+      .toISOString();
+
+    Responder.success(res, { token, expires_at });
+  },
   loginValidator: [
     check("email")
       .trim()
@@ -25,19 +61,6 @@ module.exports = {
       .isEmpty()
       .withMessage("password daal re")
   ],
-  async login(req, res) {
-    const user = await UserModel.findOne({ email: req.body.email });
-
-    if (!bcrypt.compareSync(req.body.password, user.password)) {
-      return Responder.unauthorized(res, "invalid credentials");
-    }
-
-    const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRY,
-      notBefore: process.env.JWT_NOT_BEFORE
-    });
-    Responder.success(res, token);
-  },
   /**
    * @api {POST} /api/v1/auth/register Register
    * @apiName Register
@@ -48,7 +71,6 @@ module.exports = {
    * @apiParam {String} last_name
    * @apiParam {Email} email
    * @apiParam {Date} dob
-   * @apiParam {String} password
    * @apiParam {String} password
    * @apiParam {String} password_confirmation
    * @apiUse ValidationErrorResponse
