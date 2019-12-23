@@ -17,3 +17,10 @@
  * @apiSuccess {Boolean} status=true
  * @apiSuccess {String} message="request completed"
  */
+
+/**
+ * @apiDefine AuthHeader
+ * @apiHeader {String} Authorization Bearer token
+ * @apiError (Error 401) {Boolean} status=false
+ * @apiError (Error 401) {message} message=unauthorized
+ */

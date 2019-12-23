@@ -174,5 +174,21 @@ module.exports = {
           return Promise.reject("email nahi mila re");
         }
       })
-  ]
+  ],
+  /**
+   * @api {GET} /api/v1/profile Profile
+   * @apiName Profile
+   * @apiGroup Auth
+   * @apiVersion 1.0.0
+   * @apiUse AuthHeader
+   * @apiUse SuccessResponse
+   */
+  async profile(req, res) {
+    const user = await UserModel.findOne(
+      { _id: res.locals.decoded.sub },
+      { first_name: 1, middle_name: 1, last_name: 1, dob: 1 }
+    );
+
+    return Responder.success(res, user);
+  }
 };
