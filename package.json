@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Todo app in MEAN Stack",
   "apidoc": {
+    "name": "Mean Todo",
     "title": "Mean Todo",
     "url": "http://localhost:6969",
     "sampleUrl": "http://localhost:6969"
