@@ -190,5 +190,40 @@ module.exports = {
     );
 
     return Responder.success(res, user);
+  },
+  async activate(req, res) {
+    const token = await UserTokenModel.findOne({
+      user: req.params.userId,
+      token: req.params.token,
+      type: "activation_token",
+      expires_at: { $gte: moment().toISOString() },
+      is_revoked: false
+    });
+
+    if (!token) {
+      const template = fs.readFileSync(
+        appRoot + "/resources/views/activation-token-not-valid.html",
+        { encoding: "utf-8" }
+      );
+      return res.send(template);
+    }
+
+    let user = await UserModel.findOneAndUpdate(
+      {
+        _id: token.user
+      },
+      {
+        verified_at: moment().toISOString()
+      }
+    );
+
+    const template = fs.readFileSync(
+      appRoot + "/resources/views/user-activated.html",
+      { encoding: "utf-8" }
+    );
+    res.send(template);
+
+    token.is_revoked = true;
+    await token.save();
   }
 };
