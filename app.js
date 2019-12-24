@@ -38,5 +38,5 @@ app.use(express.static("public"));
 const server = app.listen(process.env.SERVER_PORT, function() {
   console.log(`server started on port ${process.env.SERVER_PORT}`);
   const listEndpoints = require("express-list-endpoints");
-  console.log(listEndpoints(app));
+  console.table(listEndpoints(app));
 });
