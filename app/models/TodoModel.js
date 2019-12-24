@@ -9,6 +9,10 @@ const TodoSchema = new Schema(
       ref: "User"
     },
     body: String,
+    description: {
+      type: String,
+      default: null
+    },
     is_complete: {
       type: Boolean,
       default: false

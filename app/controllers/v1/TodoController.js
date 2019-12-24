@@ -15,7 +15,7 @@ module.exports = {
   async list(req, res) {
     const todos = await TodoModel.find(
       { user: res.locals.decoded.sub },
-      { is_complete: 1, body: 1 }
+      { is_complete: 1, body: 1, description: 1, created_at: 1 }
     ).sort("-created_at");
 
     Responder.success(res, todos);
@@ -26,6 +26,7 @@ module.exports = {
    * @apiGroup Todo
    * @apiVersion 1.0.0
    * @apiParam {String} todo
+   * @apiParam {String} description
    * @apiUse AuthHeader
    * @apiUse ValidationErrorResponse
    * @apiUse SuccessResponse
@@ -34,7 +35,8 @@ module.exports = {
   async create(req, res) {
     const todo = new TodoModel({
       body: req.body.todo,
-      user: res.locals.decoded.sub
+      user: res.locals.decoded.sub,
+      description: req.body.description || null
     });
 
     await todo.save();
