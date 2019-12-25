@@ -1,4 +1,9 @@
 // dotenv
+const fs = require("fs");
+if (!fs.existsSync(".env")) {
+  console.log(".env toh bana le");
+  process.exit();
+}
 require("dotenv").config();
 
 // mongoose
