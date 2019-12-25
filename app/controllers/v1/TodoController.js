@@ -1,6 +1,5 @@
 const { check } = require("express-validator");
 const TodoModel = reqlib("app/models/TodoModel").TodoModel;
-const Responder = reqlib("app/services/ResponderService");
 const ObjectId = require("mongoose").Types.ObjectId;
 module.exports = {
   /**

@@ -1,4 +1,3 @@
-const Responder = reqlib("app/services/ResponderService");
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {

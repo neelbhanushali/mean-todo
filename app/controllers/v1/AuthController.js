@@ -1,7 +1,6 @@
 const UserModel = reqlib("app/models/UserModel").UserModel;
 const { check } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const Responder = reqlib("app/services/ResponderService");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
 

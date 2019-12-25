@@ -3,7 +3,7 @@ global.appRoot = require("app-root-path");
 global.reqlib = appRoot.require;
 
 // responder
-const Responder = reqlib("app/services/ResponderService");
+global.Responder = reqlib("app/services/ResponderService");
 
 // global validate function
 // sauce: https://express-validator.github.io/docs/running-imperatively.html#example-standardized-validation-error-response
